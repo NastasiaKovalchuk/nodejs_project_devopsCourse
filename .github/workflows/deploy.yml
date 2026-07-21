@@ -20,5 +20,11 @@ jobs:
       - name: Run tests
         run: npm run test
       
-      - name: Сборка Docker build
+      - name: Docker build
         run: docker build -t ${{ secrets.DOCKER_USER }}/devops-node-starter:${{ github.sha }} .
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASS }}" | docker login -u ${{ secrets.DOCKER_USER }} --password-stdin
+
+      - name: Push Docker image
+        run: docker push ${{ secrets.DOCKER_USER }}/my-node-app:${{ github.sha }}
